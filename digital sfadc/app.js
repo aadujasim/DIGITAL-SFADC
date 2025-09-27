@@ -395,7 +395,7 @@ renderContent(sectionName) {
                 const filteredNotifications = notifications.filter(notif => 
                     notif.target === 'both' ||
                     (notif.target === 'staff' && (user.role === 'Staff' || user.role === 'Principal')) ||
-                    (notif.target === 'students' && user.role === 'Student')
+                    (notif.target === 'students' && (user.role === 'Student' || user.role === 'Principal'))
                 );
 
                 if (filteredNotifications.length === 0) {
@@ -564,22 +564,20 @@ renderFoodCancellations() {
     const user = App.state.currentUser;
     let formHTML = '';
 
-    // 1. --- NEW: Update the form with Class and Table Number fields ---
+    // The form is shown to Staff and Principal to create cancellations
     if (user.role === 'Staff' || user.role === 'Principal') {
         formHTML = `
-       
             <h3>Cancel a Student's Meal</h3>
             
-            <form id="Today food-cancel-form" class="card">
+            {/* ✅ FIX: The ID is now "food-cancel-form" without "Today " */}
+            <form id="food-cancel-form" class="card"> 
                 <div class="form-group">
                     <label for="cancel-student-name">Student Name</label>
                     <input type="text" id="cancel-student-name" required>
                 </div>
                 <div class="form-group">
-                
                     <label for="cancel-student-class">Class</label>
                     <select id="cancel-student-class" required>
-                    
                         <option value="">-- Select Class --</option>
                         ${CLASS_NAMES.map(name => `<option value="${name}">${name}</option>`).join('')}
                     </select>
@@ -612,11 +610,11 @@ renderFoodCancellations() {
         </div>
     `;
 
+    // This listener now correctly finds the form by its ID
     const cancelForm = document.getElementById('food-cancel-form');
     if (cancelForm) {
         cancelForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // 2. --- NEW: Get new values from the updated form ---
             const cancellationData = {
                 studentName: document.getElementById('cancel-student-name').value,
                 studentClass: document.getElementById('cancel-student-class').value,
@@ -630,18 +628,17 @@ renderFoodCancellations() {
         });
     }
 
+    // This part of the code is already correct and will display the report
+    // for ANY user, including Canteen Workers. It just needs data to show.
     const reportArea = document.getElementById('cancellation-report-area');
-
     App.db.getFoodCancellations(allCancellations => {
         const todayStr = new Date().toISOString().split('T')[0];
         const todaysCancellations = allCancellations.filter(c => c.date === todayStr);
 
-        // 3. --- NEW: Categorize cancellations by meal ---
         const breakfast = todaysCancellations.filter(c => c.meal === 'Breakfast');
         const lunch = todaysCancellations.filter(c => c.meal === 'Lunch');
         const dinner = todaysCancellations.filter(c => c.meal === 'Dinner');
 
-        // Helper function to render a list for a specific meal
         const renderMealList = (mealName, list) => {
             let listHTML = `<div class="card" style="margin-bottom: 1rem;"><h4>${mealName} (${list.length})</h4>`;
             if (list.length === 0) {
@@ -661,7 +658,6 @@ renderFoodCancellations() {
             return listHTML;
         };
 
-        // 4. --- NEW: Build the categorized report HTML ---
         reportArea.innerHTML = `
             ${renderMealList('Breakfast', breakfast)}
             ${renderMealList('Lunch', lunch)}
