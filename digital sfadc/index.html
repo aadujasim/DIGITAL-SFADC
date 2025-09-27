@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="styles.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1"></script>
+
+</head>
+<body>
+
+    <div id="app-container">
+
+        <div id="login-view" class="view active">
+            <div class="login-card">
+                <h2>DIGITAL SFADC LOGIN</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
+                    <p id="login-error" class="error-text"></p>
+                </form>
+            </div>
+        </div>
+
+        <div id="dashboard-view" class="view">
+            <header class="app-header">
+                <h1>DIGITAL SFADC</h1>
+                <div class="user-profile">
+                    <span id="user-display"></span>
+                    <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                </div>
+            </header>
+            <main class="dashboard-main">
+                <nav class="sidebar" id="dashboard-nav"></nav>
+                <section class="content" id="dashboard-content"></section>
+            </main>
+        </div>
+    </div>
+
+    <template id="notification-card-template">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h3 class="notification-title"></h3>
+                    <small class="notification-meta"></small>
+                </div>
+                <div class="card-actions"></div>
+            </div>
+            <p class="notification-message"></p>
+        </div>
+    </template>
+
+    <template id="booking-card-template">
+         <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p><strong>Computer #<span class="booking-computer"></span></strong> on <span class="booking-date"></span></p>
+                <p>Booked for: <span class="booking-student"></span> (Adm: <span class="booking-adm"></span>)</p>
+                <p><small>Approved by: <span class="booking-approver"></span></small></p>
+            </div>
+            <div class="card-actions"></div>
+        </div>
+    </template>
+
+<template id="food-cancellation-card-template">
+    <div class="card">
+        <p style="margin-bottom: 0.5rem;"><strong><span class="cancellation-student"></span></strong></p>
+        <p><small>Class: <span class="cancellation-class"></span> | Table #: <span class="cancellation-table"></span></small></p>
+        <p><small>Marked by: <span class="cancellation-approver"></span></small></p>
+    </div>
+</template>
+
+    <template id="attendance-card-template">
+        <div class="card">
+            <p><strong><span class="attendance-student"></span></strong> (<span class="attendance-status"></span>)</p>
+            <p><small>Marked by: <span class="attendance-marker"></span> on <span class="attendance-date"></span></small></p>
+        </div>
+    </template>
+    <template id="roster-item-template">
+    <div class="roster-item">
+        <span class="roster-name"></span>
+        <div class="status-toggle">
+            <input type="radio" name="status" value="Present" checked> <label>Present</label>
+            <input type="radio" name="status" value="Absent"> <label>Absent</label>
+        </div>
+    </div>
+    </template>
+    <template id="roster-item-template">
+    <div class="roster-item">
+        <span class="roster-name"></span>
+        <div class="status-toggle">
+            <label><input type="radio" name="status" value="Present" checked> Present</label>
+            <label><input type="radio" name="status" value="Absent"> Absent</label>
+        </div>
+    </div>
+</template>
+    
+    <script src="app.js" type="module"></script>
+</body>
+</html>
